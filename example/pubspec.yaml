@@ -2,9 +2,11 @@ name: timetable_example
 description: A simple example app for the timetable package
 publish_to: none
 
+version: 1.0.0
+
 environment:
-  sdk: '>=3.0.0 <4.0.0'
-  flutter: '>=3.10.0'
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
 
 dependencies:
   debug_overlay: ^0.2.1

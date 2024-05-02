@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../config.dart';
+import '../enum/arrange_method.dart';
 import '../event/builder.dart';
 import '../event/event.dart';
 import '../theme.dart';
@@ -37,22 +38,26 @@ class DateEvents<E extends Event> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final eventBuilder =
-        this.eventBuilder ?? DefaultEventBuilder.of<E>(context)!;
-    final style = this.style ??
-        TimetableTheme.orDefaultOf(context).dateEventsStyleProvider(date);
+    final eventBuilder = this.eventBuilder ?? DefaultEventBuilder.of<E>(context)!;
+    final style = this.style ?? TimetableTheme.orDefaultOf(context).dateEventsStyleProvider(date);
     return Padding(
       padding: style.padding,
-      child: CustomMultiChildLayout(
-        delegate: _DayEventsLayoutDelegate(date, events, style),
-        children: [
-          for (final event in events)
-            LayoutId(
-              key: ValueKey(event),
-              id: event,
-              child: eventBuilder(context, event),
-            ),
-        ],
+      child: LayoutBuilder(
+        builder: (context, constraints) => CustomMultiChildLayout(
+          delegate: _DayEventsLayoutDelegate(
+            date,
+            events,
+            style,
+          ),
+          children: [
+            for (final event in events)
+              LayoutId(
+                key: ValueKey(event),
+                id: event,
+                child: eventBuilder(context, event),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -83,8 +88,7 @@ class DateEventsStyle {
       minEventHeight: minEventHeight ?? 16,
       padding: padding ?? const EdgeInsets.only(right: 1),
       enableStacking: enableStacking ?? true,
-      minEventDeltaForStacking:
-          minEventDeltaForStacking ?? const Duration(minutes: 15),
+      minEventDeltaForStacking: minEventDeltaForStacking ?? const Duration(minutes: 15),
       stackedEventSpacing: stackedEventSpacing ?? 4,
     );
   }
@@ -144,8 +148,7 @@ class DateEventsStyle {
       minEventHeight: minEventHeight ?? this.minEventHeight,
       padding: padding ?? this.padding,
       enableStacking: enableStacking ?? this.enableStacking,
-      minEventDeltaForStacking:
-          minEventDeltaForStacking ?? this.minEventDeltaForStacking,
+      minEventDeltaForStacking: minEventDeltaForStacking ?? this.minEventDeltaForStacking,
       stackedEventSpacing: stackedEventSpacing ?? this.stackedEventSpacing,
     );
   }
@@ -174,12 +177,17 @@ class DateEventsStyle {
   }
 }
 
-class _DayEventsLayoutDelegate<E extends Event>
-    extends MultiChildLayoutDelegate {
-  _DayEventsLayoutDelegate(this.date, this.events, this.style)
-      : assert(date.debugCheckIsValidTimetableDate());
+class _DayEventsLayoutDelegate<E extends Event> extends MultiChildLayoutDelegate {
+  _DayEventsLayoutDelegate(
+    this.date,
+    this.events,
+    this.style, [
+    this.arrangeMethod = ArrangeMethod.parallel,
+  ]) : assert(date.debugCheckIsValidTimetableDate());
 
   static const minWidth = 4.0;
+
+  final ArrangeMethod arrangeMethod;
 
   final DateTime date;
   final List<E> events;
@@ -190,6 +198,15 @@ class _DayEventsLayoutDelegate<E extends Event>
   void performLayout(Size size) {
     assert(size.height > 0);
 
+    return switch (arrangeMethod) {
+      ArrangeMethod.stacking => _arrangeAsStack(size),
+      ArrangeMethod.parallel => _arrangeParallel(size),
+    };
+  }
+
+  // #region Stacking
+
+  void _arrangeAsStack(Size size) {
     final positions = _calculatePositions(size.height);
 
     double durationToY(Duration duration) {
@@ -206,20 +223,15 @@ class _DayEventsLayoutDelegate<E extends Event>
     }
 
     for (final event in events) {
-      final top = timeToY(event.start)
-          .coerceAtMost(size.height - durationToY(style.minEventDuration))
-          .coerceAtMost(size.height - style.minEventHeight);
-      final height = durationToY(_durationOn(event, size.height))
-          .clamp(0, size.height - top)
-          .toDouble();
+      final top =
+          timeToY(event.start).coerceAtMost(size.height - durationToY(style.minEventDuration)).coerceAtMost(size.height - style.minEventHeight);
+      final height = durationToY(_durationOn(event, size.height)).clamp(0, size.height - top).toDouble();
 
       final position = positions.eventPositions[event]!;
-      final columnWidth =
-          size.width / positions.groupColumnCounts[position.group];
+      final columnWidth = size.width / positions.groupColumnCounts[position.group];
       final columnLeft = columnWidth * position.column;
       final left = columnLeft + position.index * style.stackedEventSpacing;
-      final width = columnWidth * position.columnSpan -
-          position.index * style.stackedEventSpacing;
+      final width = columnWidth * position.columnSpan - position.index * style.stackedEventSpacing;
 
       final childSize = Size(width.coerceAtLeast(minWidth), height);
       layoutChild(event, BoxConstraints.tight(childSize));
@@ -246,9 +258,7 @@ class _DayEventsLayoutDelegate<E extends Event>
 
       currentGroup.add(event);
       final actualEnd = _actualEnd(event, height);
-      currentEnd = currentEnd == null
-          ? actualEnd
-          : currentEnd.coerceAtLeast(_actualEnd(event, height));
+      currentEnd = currentEnd == null ? actualEnd : currentEnd.coerceAtLeast(_actualEnd(event, height));
     }
     _endGroup(positions, currentGroup, height);
 
@@ -262,8 +272,7 @@ class _DayEventsLayoutDelegate<E extends Event>
   ) {
     if (currentGroup.isEmpty) return;
     if (currentGroup.length == 1) {
-      positions.eventPositions[currentGroup.first] =
-          _SingleEventPosition(positions.groupColumnCounts.length, 0, 0);
+      positions.eventPositions[currentGroup.first] = _SingleEventPosition(positions.groupColumnCounts.length, 0, 0);
       positions.groupColumnCounts.add(1);
       return;
     }
@@ -280,24 +289,16 @@ class _DayEventsLayoutDelegate<E extends Event>
 
         // No space in current column
         if (!style.enableStacking && event.start < _actualEnd(other, height) ||
-            style.enableStacking &&
-                event.start < other.start + style.minEventDeltaForStacking) {
+            style.enableStacking && event.start < other.start + style.minEventDeltaForStacking) {
           continue;
         }
 
-        final index = column
-                .where((e) => _actualEnd(e, height) >= event.start)
-                .map((e) => positions.eventPositions[e]!.index)
-                .maxOrNull ??
-            -1;
+        final index = column.where((e) => _actualEnd(e, height) >= event.start).map((e) => positions.eventPositions[e]!.index).maxOrNull ?? -1;
 
-        final previousEnd = column
-            .map((it) => it.end)
-            .reduce((value, element) => value.coerceAtLeast(element));
+        final previousEnd = column.map((it) => it.end).reduce((value, element) => value.coerceAtLeast(element));
 
         // Further at the top and hence wider
-        if (index < minIndex ||
-            (index == minIndex && (minEnd != null && previousEnd < minEnd))) {
+        if (index < minIndex || (index == minIndex && (minEnd != null && previousEnd < minEnd))) {
           minColumn = columnIndex;
           minIndex = index;
           minEnd = previousEnd;
@@ -333,16 +334,13 @@ class _DayEventsLayoutDelegate<E extends Event>
       for (var i = position.column + 1; i < columns.length; i++) {
         final hasOverlapInColumn = currentGroup
             .where((e) => positions.eventPositions[e]!.column == i)
-            .where((e) =>
-                event.start < _actualEnd(e, height) &&
-                e.start < _actualEnd(event, height))
+            .where((e) => event.start < _actualEnd(e, height) && e.start < _actualEnd(event, height))
             .isNotEmpty;
         if (hasOverlapInColumn) break;
 
         columnSpan++;
       }
-      positions.eventPositions[event] =
-          position.copyWith(columnSpan: columnSpan);
+      positions.eventPositions[event] = position.copyWith(columnSpan: columnSpan);
     }
 
     positions.groupColumnCounts.add(columns.length);
@@ -350,9 +348,7 @@ class _DayEventsLayoutDelegate<E extends Event>
 
   DateTime _actualEnd(E event, double height) {
     final minDurationForHeight = (style.minEventHeight / height).days;
-    return event.end
-        .coerceAtLeast(event.start + style.minEventDuration)
-        .coerceAtLeast(event.start + minDurationForHeight);
+    return event.end.coerceAtLeast(event.start + style.minEventDuration).coerceAtLeast(event.start + minDurationForHeight);
   }
 
   Duration _durationOn(E event, double height) {
@@ -361,12 +357,109 @@ class _DayEventsLayoutDelegate<E extends Event>
     return end.difference(start);
   }
 
-  @override
-  bool shouldRelayout(_DayEventsLayoutDelegate<E> oldDelegate) {
-    return date != oldDelegate.date ||
-        style != oldDelegate.style ||
-        !const DeepCollectionEquality().equals(events, oldDelegate.events);
+  // #endregion
+
+  // #region Parallel
+
+  void _arrangeParallel(Size size) {
+    final width = size.width;
+    var columns = <List<PositionedEvent<E>>>[];
+    double? lastEventEnding;
+
+    double durationToY(Duration duration) {
+      assert(duration.debugCheckIsValidTimetableTimeOfDay());
+      return size.height * (duration / 1.days);
+    }
+
+    double timeToY(DateTime dateTime) {
+      assert(dateTime.debugCheckIsValidTimetableDateTime());
+
+      if (dateTime < date) return 0;
+      if (dateTime.atStartOfDay > date) return size.height;
+      return durationToY(dateTime.timeOfDay);
+    }
+
+    final positionedEvents = events
+        .map((e) => PositionedEvent<E>(
+              event: e,
+              top: timeToY(e.start),
+              bottom: timeToY(e.end),
+            ))
+        .toList();
+
+    final sorted = positionedEvents
+      ..sort((e1, e2) {
+        if (e1.top < e2.top) return -1;
+        if (e1.top > e2.top) return 1;
+        if (e1.bottom < e2.bottom) return -1;
+        if (e1.bottom > e2.bottom) return 1;
+        return 0;
+      });
+
+    for (final event in sorted) {
+      if (lastEventEnding != null && event.top >= lastEventEnding) {
+        _packEvents(columns, width);
+        columns = [];
+        lastEventEnding = null;
+      }
+
+      var placed = false;
+      for (var i = 0; i < columns.length; i++) {
+        final col = columns[i];
+        if (!collidesWith(col.last, event)) {
+          col.add(event);
+          placed = true;
+          break;
+        }
+      }
+
+      if (!placed) {
+        columns.add([event]);
+      }
+
+      if (lastEventEnding == null || event.bottom > lastEventEnding) {
+        lastEventEnding = event.bottom;
+      }
+    }
+
+    if (columns.isNotEmpty) {
+      _packEvents(columns, width);
+    }
   }
+
+  bool collidesWith(PositionedEvent<E> a, PositionedEvent<E> b) {
+    return a.bottom > b.top && a.top < b.bottom;
+  }
+
+  void _packEvents(List<List<PositionedEvent<E>>> columns, double width) {
+    final n = columns.length;
+    for (var i = 0; i < n; i++) {
+      final column = columns[i];
+      for (var j = 0; j < column.length; j++) {
+        final event = column[j];
+        final left = (width / n) * i;
+        final right = (width / n) * (i + 1);
+        final top = event.top;
+        final bottom = event.bottom;
+
+        final childSize = Size(right - left, bottom - top);
+        layoutChild(event.event, BoxConstraints.tight(childSize));
+        positionChild(event.event, Offset(left, top));
+      }
+    }
+  }
+
+  // #endregion
+
+  @override
+  bool shouldRelayout(_DayEventsLayoutDelegate<E> oldDelegate) =>
+      date != oldDelegate.date ||
+      style != oldDelegate.style ||
+      !const DeepCollectionEquality().equals(
+        events,
+        oldDelegate.events,
+      ) ||
+      arrangeMethod != oldDelegate.arrangeMethod;
 }
 
 class _EventPositions {
@@ -395,4 +488,16 @@ class _SingleEventPosition {
       columnSpan: columnSpan ?? this.columnSpan,
     );
   }
+}
+
+class PositionedEvent<E extends Event> {
+  const PositionedEvent({
+    required this.event,
+    required this.top,
+    required this.bottom,
+  });
+
+  final E event;
+  final double top;
+  final double bottom;
 }
