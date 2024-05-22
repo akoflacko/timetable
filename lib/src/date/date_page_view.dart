@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -113,7 +112,7 @@ class _DatePageViewState extends State<DatePageView> {
             valueListenable: _controller!.map((it) => it.visibleDayCount),
             builder: (context, visibleDayCount, _) => SliverFillViewport(
               padEnds: false,
-              viewportFraction: 1 / 7,
+              viewportFraction: 1 / visibleDayCount,
               delegate: SliverChildBuilderDelegate(
                 (context, index) => _buildPage(context, _minPage + index),
               ),
@@ -145,7 +144,6 @@ class _DatePageViewState extends State<DatePageView> {
   }
 
   Widget _buildPage(BuildContext context, int page) {
-    log('PAGE: $page');
     var child = widget.builder(context, DateTimeTimetable.dateFromPage(page));
     if (widget.shrinkWrapInCrossAxis) {
       child = ImmediateSizeReportingOverflowPage(
