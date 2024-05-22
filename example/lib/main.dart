@@ -19,8 +19,7 @@ class TimetableExample extends StatefulWidget {
   State<TimetableExample> createState() => _TimetableExampleState();
 }
 
-class _TimetableExampleState extends State<TimetableExample>
-    with TickerProviderStateMixin {
+class _TimetableExampleState extends State<TimetableExample> with TickerProviderStateMixin {
   var _visibleDateRange = PredefinedVisibleDateRange.week;
   void _updateVisibleDateRange(PredefinedVisibleDateRange newValue) {
     setState(() {
@@ -29,8 +28,7 @@ class _TimetableExampleState extends State<TimetableExample>
     });
   }
 
-  bool get _isRecurringLayout =>
-      _visibleDateRange == PredefinedVisibleDateRange.fixed;
+  bool get _isRecurringLayout => _visibleDateRange == PredefinedVisibleDateRange.fixed;
 
   late final _dateController = DateController(
     // All parameters are optional.
@@ -66,9 +64,7 @@ class _TimetableExampleState extends State<TimetableExample>
       child: Column(children: [
         _buildAppBar(),
         Expanded(
-          child: _isRecurringLayout
-              ? RecurringMultiDateTimetable<BasicEvent>()
-              : MultiDateTimetable<BasicEvent>(),
+          child: _isRecurringLayout ? RecurringMultiDateTimetable<BasicEvent>() : MultiDateTimetable<BasicEvent>(),
         ),
       ]),
       // Optional:
@@ -82,8 +78,7 @@ class _TimetableExampleState extends State<TimetableExample>
         positioningDemoOverlayProvider,
         (context, date) => _draggedEvents
             .map(
-              (it) =>
-                  it.toTimeOverlay(date: date, widget: BasicEventWidget(it)),
+              (it) => it.toTimeOverlay(date: date, widget: BasicEventWidget(it)),
             )
             .whereNotNull()
             .toList(),
@@ -101,12 +96,9 @@ class _TimetableExampleState extends State<TimetableExample>
           _showSnackBar('Tapped on date $date.');
           _dateController.animateTo(date, vsync: this);
         },
-        onDateBackgroundTap: (date) =>
-            _showSnackBar('Tapped on date background at $date.'),
-        onDateTimeBackgroundTap: (dateTime) =>
-            _showSnackBar('Tapped on date-time background at $dateTime.'),
-        onMultiDateHeaderOverflowTap: (date) =>
-            _showSnackBar('Tapped on the overflow of $date.'),
+        onDateBackgroundTap: (date) => _showSnackBar('Tapped on date background at $date.'),
+        onDateTimeBackgroundTap: (dateTime) => _showSnackBar('Tapped on date-time background at $dateTime.'),
+        onMultiDateHeaderOverflowTap: (date) => _showSnackBar('Tapped on the overflow of $date.'),
       ),
       theme: TimetableThemeData(
         context,
@@ -165,9 +157,7 @@ class _TimetableExampleState extends State<TimetableExample>
       iconTheme: IconThemeData(color: colorScheme.onSurface),
       systemOverlayStyle: SystemUiOverlayStyle.light,
       backgroundColor: Colors.transparent,
-      title: _isRecurringLayout
-          ? null
-          : MonthIndicator.forController(_dateController),
+      title: _isRecurringLayout ? null : MonthIndicator.forController(_dateController),
       actions: [
         IconButton(
           icon: const Icon(Icons.today),
@@ -217,8 +207,7 @@ class _TimetableExampleState extends State<TimetableExample>
     return Material(color: colorScheme.surface, elevation: 4, child: child);
   }
 
-  void _showSnackBar(String content) =>
-      context.scaffoldMessenger.showSnackBar(SnackBar(content: Text(content)));
+  void _showSnackBar(String content) => context.scaffoldMessenger.showSnackBar(SnackBar(content: Text(content)));
 }
 
 enum PredefinedVisibleDateRange { day, threeDays, workWeek, week, fixed }

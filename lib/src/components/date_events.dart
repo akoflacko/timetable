@@ -40,6 +40,7 @@ class DateEvents<E extends Event> extends StatelessWidget {
   Widget build(BuildContext context) {
     final eventBuilder = this.eventBuilder ?? DefaultEventBuilder.of<E>(context)!;
     final style = this.style ?? TimetableTheme.orDefaultOf(context).dateEventsStyleProvider(date);
+
     return Padding(
       padding: style.padding,
       child: LayoutBuilder(
