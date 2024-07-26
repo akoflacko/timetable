@@ -31,7 +31,6 @@ linter:
     comment_references: true
     conditional_uri_does_not_exist: true
     depend_on_referenced_packages: false
-    directives_ordering: true
     flutter_style_todos: true
     join_return_with_assignment: true
     no_adjacent_strings_in_list: true

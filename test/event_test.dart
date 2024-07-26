@@ -1,5 +1,6 @@
 import 'package:test/test.dart';
 import 'package:timetable/src/event/event.dart';
+import 'package:timetable/src/extension/extension.dart';
 import 'package:timetable/src/utils.dart';
 
 void main() {
@@ -75,6 +76,5 @@ void main() {
 }
 
 class _TestEvent extends Event {
-  const _TestEvent(DateTime start, DateTime end)
-      : super(start: start, end: end);
+  const _TestEvent(DateTime start, DateTime end) : super(start: start, end: end);
 }

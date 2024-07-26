@@ -20,15 +20,13 @@ typedef EventProvider<E extends Event> = List<E> Function(
 );
 
 EventProvider<E> eventProviderFromFixedList<E extends Event>(List<E> events) {
-  return (visibleRange) =>
-      events.where((it) => it.interval.intersects(visibleRange)).toList();
+  return (visibleRange) => events.where((it) => it.interval.intersects(visibleRange)).toList();
 }
 
 EventProvider<E> mergeEventProviders<E extends Event>(
   List<EventProvider<E>> eventProviders,
 ) {
-  return (visibleRange) =>
-      eventProviders.expand((it) => it(visibleRange)).toList();
+  return (visibleRange) => eventProviders.expand((it) => it(visibleRange)).toList();
 }
 
 extension EventProviderTimetable<E extends Event> on EventProvider<E> {
@@ -36,9 +34,7 @@ extension EventProviderTimetable<E extends Event> on EventProvider<E> {
     return (visibleRange) {
       final events = this(visibleRange);
       assert(() {
-        final invalidEvents = events
-            .where((it) => !it.interval.intersects(visibleRange))
-            .toList();
+        final invalidEvents = events.where((it) => !it.interval.intersects(visibleRange)).toList();
         if (invalidEvents.isNotEmpty) {
           throw FlutterError.fromParts([
             ErrorSummary(
@@ -78,12 +74,8 @@ class DefaultEventProvider<E extends Event> extends InheritedWidget {
   final EventProvider<E> eventProvider;
 
   @override
-  bool updateShouldNotify(DefaultEventProvider oldWidget) =>
-      eventProvider != oldWidget.eventProvider;
+  bool updateShouldNotify(DefaultEventProvider oldWidget) => eventProvider != oldWidget.eventProvider;
 
-  static EventProvider<E>? of<E extends Event>(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<DefaultEventProvider<E>>()
-        ?.eventProvider;
-  }
+  static EventProvider<E>? of<E extends Event>(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<DefaultEventProvider<E>>()?.eventProvider;
 }

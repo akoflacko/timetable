@@ -1,8 +1,10 @@
-import 'package:black_hole_flutter/black_hole_flutter.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:time/time.dart';
+
+import 'package:black_hole_flutter/black_hole_flutter.dart';
+import 'package:collection/collection.dart';
+import 'package:time/time.dart' hide DateTimeTimeExtension;
+
 import 'package:timetable/timetable.dart';
 
 // ignore: unused_import
@@ -55,7 +57,7 @@ class _TimetableExampleState extends State<TimetableExample> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
-    return TimetableConfig<BasicEvent>(
+    return TimetableScope<BasicEvent>(
       // Required:
       dateController: _dateController,
       timeController: _timeController,

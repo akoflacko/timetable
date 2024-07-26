@@ -34,7 +34,6 @@ linter:
     comment_references: true
     conditional_uri_does_not_exist: true
     dangling_library_doc_comments: true
-    directives_ordering: true
     discarded_futures: true
     enable_null_safety: true
     flutter_style_todos: true

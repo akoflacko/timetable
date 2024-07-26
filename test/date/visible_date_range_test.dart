@@ -1,5 +1,7 @@
 import 'package:glados/glados.dart';
-import 'package:timetable/src/utils.dart';
+import 'package:test/test.dart';
+
+import 'package:timetable/src/extension/extension.dart';
 import 'package:timetable/timetable.dart';
 
 void main() {
@@ -44,12 +46,9 @@ void main() {
     Glados2(any.dayOfWeek, any.int).test(
       'getTargetPageForFocus',
       (startOfWeek, page) {
-        final daysFromWeekStart =
-            (DateTimeTimetable.dateFromPage(page).weekday - startOfWeek) %
-                DateTime.daysPerWeek;
+        final daysFromWeekStart = (DateTimeTimetable.dateFromPage(page).weekday - startOfWeek) % DateTime.daysPerWeek;
         expect(
-          VisibleDateRange.week(startOfWeek: startOfWeek)
-              .getTargetPageForFocus(page.toDouble()),
+          VisibleDateRange.week(startOfWeek: startOfWeek).getTargetPageForFocus(page.toDouble()),
           page - daysFromWeekStart,
         );
       },
@@ -58,19 +57,14 @@ void main() {
     Glados2(any.dayOfWeek, any.double).test(
       'getTargetPageForCurrent',
       (startOfWeek, page) {
-        final daysFromWeekStart =
-            (DateTimeTimetable.dateFromPage(page.floor()).weekday +
-                    page % 1 -
-                    startOfWeek) %
-                DateTime.daysPerWeek;
+        final daysFromWeekStart = (DateTimeTimetable.dateFromPage(page.floor()).weekday + page % 1 - startOfWeek) % DateTime.daysPerWeek;
         var targetPage = page - daysFromWeekStart;
         if (daysFromWeekStart > DateTime.daysPerWeek / 2) {
           targetPage += DateTime.daysPerWeek;
         }
 
         expect(
-          VisibleDateRange.week(startOfWeek: startOfWeek)
-              .getTargetPageForCurrent(page.toDouble()),
+          VisibleDateRange.week(startOfWeek: startOfWeek).getTargetPageForCurrent(page.toDouble()),
           targetPage,
         );
       },
@@ -79,6 +73,5 @@ void main() {
 }
 
 extension on Any {
-  Generator<int> get dayOfWeek =>
-      any.intInRange(DateTime.monday, DateTime.sunday);
+  Generator<int> get dayOfWeek => any.intInRange(DateTime.monday, DateTime.sunday);
 }

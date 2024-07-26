@@ -23,7 +23,6 @@ class BasicEvent extends Event {
   ///
   /// This is not used by Timetable itself, but can be handy, e.g., when
   /// implementing drag & drop.
-  // ignore: no-object-declaration
   final Object id;
 
   /// A title displayed to the user.
@@ -55,11 +54,7 @@ class BasicEvent extends Event {
   @override
   int get hashCode => Object.hash(super.hashCode, title, backgroundColor);
   @override
-  bool operator ==(Object other) =>
-      other is BasicEvent &&
-      super == other &&
-      title == other.title &&
-      backgroundColor == other.backgroundColor;
+  bool operator ==(Object other) => other is BasicEvent && super == other && title == other.title && backgroundColor == other.backgroundColor;
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

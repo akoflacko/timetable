@@ -1,9 +1,11 @@
-import 'package:black_hole_flutter/black_hole_flutter.dart';
-import 'package:debug_overlay/debug_overlay.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:black_hole_flutter/black_hole_flutter.dart';
+import 'package:debug_overlay/debug_overlay.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
 import 'package:timetable/timetable.dart';
 
 final _mediaOverrideState = ValueNotifier(MediaOverrideState());
@@ -64,22 +66,18 @@ class ExampleApp extends StatelessWidget {
       applyElevationOverlayColor: true,
       primaryColor: Colors.blue,
       primarySwatch: Colors.blue,
-      snackBarTheme:
-          const SnackBarThemeData(behavior: SnackBarBehavior.floating),
+      snackBarTheme: const SnackBarThemeData(behavior: SnackBarBehavior.floating),
     );
     theme = theme.copyWith(
-      colorScheme: theme.colorScheme
-          .copyWith(onBackground: theme.colorScheme.background.contrastColor),
+      colorScheme: theme.colorScheme.copyWith(onBackground: theme.colorScheme.background.contrastColor),
       textTheme: theme.textTheme.copyWith(
-        titleLarge:
-            theme.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.normal),
+        titleLarge: theme.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.normal),
       ),
     );
 
     // We want to extend Timetable behind the navigation bar.
     SystemChrome.setSystemUIOverlayStyle(
-      brightness.contrastSystemUiOverlayStyle
-          .copyWith(systemNavigationBarColor: Colors.transparent),
+      brightness.contrastSystemUiOverlayStyle.copyWith(systemNavigationBarColor: Colors.transparent),
     );
     return theme;
   }

@@ -1,18 +1,8 @@
 import 'package:flutter/widgets.dart' hide Interval;
 
-import '../components/multi_date_event_header_overflow.dart';
-import 'all_day.dart';
+import '../typedef/typedef.dart';
+import '../widget/multi_date_event_header_overflow.dart';
 import 'event.dart';
-
-typedef EventBuilder<E extends Event> = Widget Function(
-  BuildContext context,
-  E event,
-);
-typedef AllDayOverflowBuilder<E extends Event> = Widget Function(
-  BuildContext context,
-  DateTime date,
-  List<E> overflowedEvents,
-);
 
 class DefaultEventBuilder<E extends Event> extends InheritedWidget {
   DefaultEventBuilder({
@@ -20,8 +10,7 @@ class DefaultEventBuilder<E extends Event> extends InheritedWidget {
     AllDayEventBuilder<E>? allDayBuilder,
     AllDayOverflowBuilder<E>? allDayOverflowBuilder,
     required super.child,
-  })  : allDayBuilder =
-            allDayBuilder ?? ((context, event, _) => builder(context, event)),
+  })  : allDayBuilder = allDayBuilder ?? ((context, event, _) => builder(context, event)),
         allDayOverflowBuilder = allDayOverflowBuilder ??
             ((context, date, overflowedEvents) => MultiDateEventHeaderOverflow(
                   date,
@@ -33,28 +22,21 @@ class DefaultEventBuilder<E extends Event> extends InheritedWidget {
   final AllDayOverflowBuilder<E> allDayOverflowBuilder;
 
   @override
-  bool updateShouldNotify(DefaultEventBuilder<E> oldWidget) =>
-      builder != oldWidget.builder || allDayBuilder != oldWidget.allDayBuilder;
+  bool updateShouldNotify(DefaultEventBuilder<E> oldWidget) => builder != oldWidget.builder || allDayBuilder != oldWidget.allDayBuilder;
 
   static EventBuilder<E>? of<E extends Event>(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<DefaultEventBuilder<E>>()
-        ?.builder;
+    return context.dependOnInheritedWidgetOfExactType<DefaultEventBuilder<E>>()?.builder;
   }
 
   static AllDayEventBuilder<E>? allDayOf<E extends Event>(
     BuildContext context,
   ) {
-    return context
-        .dependOnInheritedWidgetOfExactType<DefaultEventBuilder<E>>()
-        ?.allDayBuilder;
+    return context.dependOnInheritedWidgetOfExactType<DefaultEventBuilder<E>>()?.allDayBuilder;
   }
 
   static AllDayOverflowBuilder<E>? allDayOverflowOf<E extends Event>(
     BuildContext context,
   ) {
-    return context
-        .dependOnInheritedWidgetOfExactType<DefaultEventBuilder<E>>()
-        ?.allDayOverflowBuilder;
+    return context.dependOnInheritedWidgetOfExactType<DefaultEventBuilder<E>>()?.allDayOverflowBuilder;
   }
 }

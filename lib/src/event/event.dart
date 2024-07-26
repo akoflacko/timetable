@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 
+import '../extension/extension.dart';
 import '../utils.dart';
+
 import 'basic.dart';
 
 /// The base class of all events.
