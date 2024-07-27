@@ -163,23 +163,3 @@ class TimetableThemeData {
         weekIndicatorStyleProvider == other.weekIndicatorStyleProvider;
   }
 }
-
-/// Provides styles for nested Timetable widgets.
-///
-/// See also:
-///
-/// * [TimetableThemeData], which bundles the actual styles.
-class TimetableTheme extends InheritedWidget {
-  const TimetableTheme({
-    required this.data,
-    required super.child,
-  });
-
-  final TimetableThemeData data;
-
-  @override
-  bool updateShouldNotify(TimetableTheme oldWidget) => data != oldWidget.data;
-
-  static TimetableThemeData? of(BuildContext context) => context.dependOnInheritedWidgetOfExactType<TimetableTheme>()?.data;
-  static TimetableThemeData orDefaultOf(BuildContext context) => of(context) ?? TimetableThemeData(context);
-}

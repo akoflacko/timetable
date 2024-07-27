@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import '../../controller/controller.dart';
 import '../../event/event.dart';
 import '../../event/provider.dart';
-import '../../resources/theme.dart';
 import '../../typedef/typedef.dart';
 import '../../utils.dart';
 import '../../utils/constraints_passing_column.dart';
+import '../scope/scope.dart';
 import '../widget.dart';
 
 /// A Timetable widget that displays multiple consecutive days.
@@ -14,7 +14,7 @@ import '../widget.dart';
 /// To configure it, provide a [DateController], [TimeController],
 /// [EventProvider], and [EventBuilder] via a [TimetableScope] widget above in
 /// the widget tree. (You can also provide these via `DefaultFoo` widgets
-/// directly, like [DefaultDateController].)
+/// directly, like [DateControllerScope].)
 ///
 /// See also:
 ///
@@ -88,17 +88,17 @@ class _MultiDateTimetableState<E extends Event> extends State<MultiDateTimetable
 
   @override
   Widget build(BuildContext context) {
-    final style = TimetableTheme.orDefaultOf(context).multiDateTimetableStyle;
-    final eventProvider = DefaultEventProvider.of<E>(context) ?? (_) => [];
+    final style = TimetableThemeScope.maybeOrDefaultOf(context).multiDateTimetableStyle;
+    final eventProvider = EventProviderScope.of<E>(context) ?? (_) => [];
 
-    final header = DefaultEventProvider<E>(
+    final header = EventProviderScope<E>(
       eventProvider: (visibleDates) => eventProvider(visibleDates).where((it) => it.isAllDay).toList(),
       child: Builder(
         builder: (context) => widget.headerBuilder(context, _leadingWidth),
       ),
     );
 
-    final content = DefaultEventProvider<E>(
+    final content = EventProviderScope<E>(
       eventProvider: (visibleDates) => eventProvider(visibleDates).where((it) => it.isPartDay).toList(),
       child: Builder(
         builder: (context) => widget.contentBuilder(
@@ -263,7 +263,7 @@ class _DefaultContentLeading extends StatelessWidget {
               // `TimeIndicators.hours` overwrites the style provider's labels by
               // default, but here we want the user's style provider from the ambient
               // theme to take precedence.
-              styleProvider: TimetableTheme.of(context)?.timeIndicatorStyleProvider,
+              styleProvider: TimetableThemeScope.themeOf(context)?.timeIndicatorStyleProvider,
             ),
           ),
         ),

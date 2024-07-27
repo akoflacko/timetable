@@ -8,7 +8,8 @@ import '../resources/localization.dart';
 import '../resources/theme.dart';
 import '../utils.dart';
 
-import 'scope.dart';
+import 'scope/timetable_scope.dart';
+import 'scope/theme_scope.dart';
 import 'time_indicators.dart';
 
 /// A widget that displays a label at the given time.
@@ -18,7 +19,7 @@ import 'time_indicators.dart';
 /// * [TimeIndicators], which positions [TimeIndicator] widgets.
 /// * [TimeIndicatorStyle], which defines visual properties (including the
 ///   label) for this widget.
-/// * [TimetableTheme] (and [TimetableScope]), which provide styles to
+/// * [TimetableThemeScope] (and [TimetableScope]), which provide styles to
 ///   descendant Timetable widgets.
 class TimeIndicator extends StatelessWidget {
   TimeIndicator({
@@ -45,7 +46,7 @@ class TimeIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = this.style ?? TimetableTheme.orDefaultOf(context).timeIndicatorStyleProvider(time);
+    final style = this.style ?? TimetableThemeScope.maybeOrDefaultOf(context).timeIndicatorStyleProvider(time);
 
     return Text(style.label, style: style.textStyle);
   }

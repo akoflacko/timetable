@@ -10,6 +10,7 @@ import '../../logic/scroll_physics.dart';
 import '../../model/model.dart';
 import '../../typedef/typedef.dart';
 import '../../utils.dart';
+import '../scope/scope.dart';
 
 /// "DateTimes can represent time values that are at a distance of at most
 /// 100,000,000 days from epoch […]".
@@ -20,7 +21,7 @@ const _precisionErrorTolerance = 1e-5;
 /// axis.
 ///
 /// A controller has to be provided, either directly via the constructor, or via
-/// a [DefaultDateController] above in the widget tree.
+/// a [DateControllerScope] above in the widget tree.
 class DatePageView extends StatefulWidget {
   const DatePageView({
     super.key,
@@ -70,7 +71,7 @@ class _DatePageViewState extends State<DatePageView> {
       _scrollController!.dispose();
     }
 
-    _controller = widget.controller ?? DefaultDateController.of(context)!;
+    _controller = widget.controller ?? DateControllerScope.of(context)!;
     _scrollController = MultiDateScrollController(_controller!);
     _controller!.date.addListener(_onDateChanged);
   }

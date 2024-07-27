@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart' hide Interval;
 import '../extension/extension.dart';
 import '../model/model.dart';
 import '../utils.dart';
-import '../widget/scope.dart';
 
 /// Controls the visible dates in Timetable widgets.
 ///
@@ -154,24 +153,5 @@ class DateController extends ValueNotifier<DatePageValueWithScrollActivity> {
     _date.dispose();
     super.dispose();
     _isDisposed = true;
-  }
-}
-
-/// Provides the [DateController] for Timetable widgets below it.
-///
-/// See also:
-///
-/// * [TimetableScope], which bundles multiple configuration widgets for
-///   Timetable.
-class DefaultDateController extends InheritedWidget {
-  const DefaultDateController({required this.controller, required super.child});
-
-  final DateController controller;
-
-  @override
-  bool updateShouldNotify(DefaultDateController oldWidget) => controller != oldWidget.controller;
-
-  static DateController? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<DefaultDateController>()?.controller;
   }
 }

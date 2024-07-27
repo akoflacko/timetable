@@ -1,20 +1,22 @@
-import 'package:black_hole_flutter/black_hole_flutter.dart';
 import 'package:flutter/material.dart';
+
+import 'package:black_hole_flutter/black_hole_flutter.dart';
 import 'package:intl/intl.dart';
 
-import '../extension/extension.dart';
-import 'scope.dart';
 import '../controller/date_controller.dart';
+import '../extension/extension.dart';
 import '../resources/localization.dart';
 import '../resources/theme.dart';
 import '../utils.dart';
+
+import 'scope/scope.dart';
 
 /// A widget that displays the name of the given month.
 ///
 /// See also:
 ///
 /// * [MonthIndicatorStyle], which defines visual properties for this widget.
-/// * [TimetableTheme] (and [TimetableScope]), which provide styles to
+/// * [TimetableThemeScope] (and [TimetableScope]), which provide styles to
 ///   descendant Timetable widgets.
 class MonthIndicator extends StatelessWidget {
   MonthIndicator(
@@ -34,7 +36,7 @@ class MonthIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = this.style ?? TimetableTheme.orDefaultOf(context).monthIndicatorStyleProvider(month);
+    final style = this.style ?? TimetableThemeScope.maybeOrDefaultOf(context).monthIndicatorStyleProvider(month);
 
     return Text(style.label, style: style.textStyle);
   }
@@ -101,7 +103,7 @@ class _MonthIndicatorForController extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = this.controller ?? DefaultDateController.of(context)!;
+    final controller = this.controller ?? DateControllerScope.of(context)!;
     return ValueListenableBuilder(
       valueListenable: controller.date.map((it) => it.firstDayOfMonth),
       builder: (context, month, _) => MonthIndicator(month, style: style),

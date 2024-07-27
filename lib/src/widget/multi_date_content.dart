@@ -2,28 +2,27 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart' hide Interval;
 
-import '../controller/date_controller.dart';
 import '../event/event.dart';
-import '../event/provider.dart';
 import '../extension/extension.dart';
 import '../model/overlay.dart';
 import '../typedef/typedef.dart';
 import '../utils.dart';
 
+import 'scope/scope.dart';
 import 'widget.dart';
 
 /// A widget that displays the content of multiple consecutive dates, zoomable
 /// and with decoration like date and hour dividers.
 ///
-/// A [DefaultDateController] must be above in the widget tree.
+/// A [DateControllerScope] must be above in the widget tree.
 ///
 /// See also:
 ///
 /// * [PartDayDraggableEvent], which can be wrapped around an event widget to
 ///   make it draggable to a different time or date.
-/// * [DefaultEventProvider] (and [TimetableScope]), which provide the [Event]s
+/// * [EventProviderScope] (and [TimetableScope]), which provide the [Event]s
 ///   to be displayed.
-/// * [DefaultTimeOverlayProvider] (and [TimetableScope]), which provide the
+/// * [TimeOverlayProviderScope] (and [TimetableScope]), which provide the
 ///   [TimeOverlay]s to be displayed.
 /// * [DateDividers], [TimeZoom], [HourDividers], [NowIndicator],
 ///   [DatePageView], and [DateContent], which are used internally by this
@@ -63,11 +62,11 @@ class _MultiDateContentState<E extends Event> extends State<MultiDateContent<E>>
   @override
   Widget build(BuildContext context) {
     final datePages = DatePageView(
-      controller: DefaultDateController.of(context)!,
+      controller: DateControllerScope.of(context)!,
       builder: (context, date) => DateContent<E>(
         date: date,
-        events: DefaultEventProvider.of<E>(context)?.call(date.fullDayInterval) ?? [],
-        overlays: DefaultTimeOverlayProvider.of(context)?.call(context, date) ?? [],
+        events: EventProviderScope.of<E>(context)?.call(date.fullDayInterval) ?? [],
+        overlays: TimeOverlayProviderScope.of(context)?.call(context, date) ?? [],
       ),
     );
 
@@ -114,7 +113,7 @@ class MultiDateContentGeometry extends State<_MultiDateContentGeometryWidget> {
     final renderBox = _findRenderBox();
     final size = renderBox.size;
     final localOffset = renderBox.globalToLocal(globalOffset);
-    final pageValue = DefaultDateController.of(context)!.value;
+    final pageValue = DateControllerScope.of(context)!.value;
     final page = (pageValue.page + localOffset.dx / size.width * pageValue.visibleDayCount).floor();
     return DateTimeTimetable.dateFromPage(page) + 1.days * (localOffset.dy / size.height);
   }

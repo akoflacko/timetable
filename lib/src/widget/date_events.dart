@@ -1,24 +1,25 @@
 import 'package:flutter/widgets.dart';
 
 import '../enum/arrange_method.dart';
-import '../event/builder.dart';
+import 'scope/event_builder_scope.dart';
 import '../event/event.dart';
 import '../extension/extension.dart';
 import '../resources/theme.dart';
 import '../typedef/typedef.dart';
 import '../utils.dart';
 
-import 'scope.dart';
+import 'scope/timetable_scope.dart';
+import 'scope/theme_scope.dart';
 
 /// A widget that displays the given [Event]s.
 ///
-/// If [eventBuilder] is not provided, a [DefaultEventBuilder] must be above in
+/// If [eventBuilder] is not provided, a [EventBuilderScope] must be above in
 /// the widget tree.
 ///
 /// See also:
 ///
 /// * [DateEventsStyle], which defines visual properties for this widget.
-/// * [TimetableTheme] (and [TimetableScope]), which provide styles to
+/// * [TimetableThemeScope] (and [TimetableScope]), which provide styles to
 ///   descendant Timetable widgets.
 class DateEvents<E extends Event> extends StatelessWidget {
   DateEvents({
@@ -41,8 +42,8 @@ class DateEvents<E extends Event> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final eventBuilder = this.eventBuilder ?? DefaultEventBuilder.of<E>(context)!;
-    final style = this.style ?? TimetableTheme.orDefaultOf(context).dateEventsStyleProvider(date);
+    final eventBuilder = this.eventBuilder ?? EventBuilderScope.eventBuilderOf<E>(context)!;
+    final style = this.style ?? TimetableThemeScope.maybeOrDefaultOf(context).dateEventsStyleProvider(date);
 
     return Padding(
       padding: style.padding,

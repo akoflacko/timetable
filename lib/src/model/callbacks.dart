@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../event/builder.dart';
+import '../widget/scope/event_builder_scope.dart';
 import '../widget/layouts/multi_date.dart';
 import '../typedef/typedef.dart';
 import '../widget/widget.dart';
@@ -54,7 +54,7 @@ class TimetableCallbacks {
   /// * [MultiDateEventHeaderStyle.maxEventRows] and
   ///   [MultiDateTimetableStyle.maxHeaderFraction], which control how many rows
   ///   are allowed before creating an overflow.
-  /// * [DefaultEventBuilder.allDayOverflowBuilder], which creates the overflow
+  /// * [EventBuilderScope.allDayOverflowBuilder], which creates the overflow
   ///   widgets.
   /// * [MultiDateEventHeaderOverflow], the default widget for representing the
   ///   overflow.
@@ -108,24 +108,5 @@ class TimetableCallbacks {
         onDateBackgroundTap == other.onDateBackgroundTap &&
         onDateTimeBackgroundTap == other.onDateTimeBackgroundTap &&
         onMultiDateHeaderOverflowTap == other.onMultiDateHeaderOverflowTap;
-  }
-}
-
-/// Provides the default callbacks for Timetable widgets below it.
-///
-/// [DefaultTimetableCallbacks] widgets above this on are overridden.
-class DefaultTimetableCallbacks extends InheritedWidget {
-  const DefaultTimetableCallbacks({
-    required this.callbacks,
-    required super.child,
-  });
-
-  final TimetableCallbacks callbacks;
-
-  @override
-  bool updateShouldNotify(DefaultTimetableCallbacks oldWidget) => callbacks != oldWidget.callbacks;
-
-  static TimetableCallbacks? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<DefaultTimetableCallbacks>()?.callbacks;
   }
 }

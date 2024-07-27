@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'scope.dart';
+import 'scope/timetable_scope.dart';
 import '../resources/theme.dart';
 import '../extension/extension.dart';
+import 'scope/theme_scope.dart';
 
 /// A widget that displays horizontal dividers between hours of a day.
 ///
 /// See also:
 ///
 /// * [HourDividersStyle], which defines visual properties for this widget.
-/// * [TimetableTheme] (and [TimetableScope]), which provide styles to
+/// * [TimetableThemeScope] (and [TimetableScope]), which provide styles to
 ///   descendant Timetable widgets.
 class HourDividers extends StatelessWidget {
   const HourDividers({
@@ -25,7 +26,7 @@ class HourDividers extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: _HourDividersPainter(
-        style: style ?? TimetableTheme.orDefaultOf(context).hourDividersStyle,
+        style: style ?? TimetableThemeScope.maybeOrDefaultOf(context).hourDividersStyle,
       ),
       child: child,
     );

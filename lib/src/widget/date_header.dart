@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
+
 import 'package:intl/intl.dart';
 
 import '../model/callbacks.dart';
-import 'scope.dart';
 import '../resources/localization.dart';
 import '../resources/theme.dart';
 import '../utils.dart';
+
 import 'date_indicator.dart';
+import 'scope/scope.dart';
 import 'weekday_indicator.dart';
 
 /// A widget that displays the weekday and date of month for the given date.
 ///
-/// If [onTap] is not supplied, [DefaultTimetableCallbacks]'s `onDateTap` is
+/// If [onTap] is not supplied, [TimetableCallbacksScope]'s `onDateTap` is
 /// used if it's provided above in the widget tree.
 ///
 /// See also:
 ///
 /// * [DateHeaderStyle], which defines visual properties for this widget.
-/// * [TimetableTheme] (and [TimetableScope]), which provide styles to
+/// * [TimetableThemeScope] (and [TimetableScope]), which provide styles to
 ///   descendant Timetable widgets.
-/// * [DefaultTimetableCallbacks], which provides callbacks to descendant
+/// * [TimetableCallbacksScope], which provides callbacks to descendant
 ///   Timetable widgets.
 class DateHeader extends StatelessWidget {
   DateHeader(
@@ -35,8 +37,8 @@ class DateHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = this.style ?? TimetableTheme.orDefaultOf(context).dateHeaderStyleProvider(date);
-    final callbacks = DefaultTimetableCallbacks.of(context);
+    final style = this.style ?? TimetableThemeScope.maybeOrDefaultOf(context).dateHeaderStyleProvider(date);
+    final callbacks = TimetableCallbacksScope.of(context);
     final defaultOnTap = callbacks?.onDateTap;
 
     return InkWell(
@@ -45,7 +47,7 @@ class DateHeader extends StatelessWidget {
         message: style.tooltip,
         child: Padding(
           padding: style.padding,
-          child: DefaultTimetableCallbacks(
+          child: TimetableCallbacksScope(
             callbacks: (callbacks ?? const TimetableCallbacks()).copyWith(clearOnDateTap: true),
             child: Column(
               mainAxisSize: MainAxisSize.min,

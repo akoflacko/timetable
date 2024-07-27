@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../extension/extension.dart';
-import '../model/time_range.dart';
+import '../model/model.dart';
 import '../utils.dart';
-import '../widget/scope.dart';
-import '../widget/layouts/multi_date.dart';
-import '../widget/layouts/recurring_multi_date.dart';
-import '../widget/zoom.dart';
+import '../widget/widget.dart';
 
 /// Controls the visible time range and zoom factor in a [MultiDateTimetable]
 /// (or [RecurringMultiDateTimetable]).
@@ -207,28 +204,6 @@ class TimeController extends ValueNotifier<TimeRange> {
   void cancelAnimation() {
     _animationController?.dispose();
     _animationController = null;
-  }
-}
-
-/// Provides the [TimeController] for Timetable widgets below it.
-///
-/// See also:
-///
-/// * [TimetableScope], which bundles multiple configuration widgets for
-///   Timetable.
-class DefaultTimeController extends InheritedWidget {
-  const DefaultTimeController({
-    required this.controller,
-    required super.child,
-  });
-
-  final TimeController controller;
-
-  @override
-  bool updateShouldNotify(DefaultTimeController oldWidget) => controller != oldWidget.controller;
-
-  static TimeController? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<DefaultTimeController>()?.controller;
   }
 }
 

@@ -12,10 +12,12 @@ import '../extension/extension.dart';
 import '../model/model.dart';
 import '../utils.dart';
 
+import 'scope/scope.dart';
+
 /// A widget that allows the user to scroll and zoom into a single day.
 ///
 /// This uses a [TimeController] to maintain its state, which has to be supplied
-/// by a [DefaultTimeController] above in the widget tree.
+/// by a [TimeControllerScope] above in the widget tree.
 class TimeZoom extends StatefulWidget {
   const TimeZoom({super.key, required this.child});
 
@@ -58,7 +60,7 @@ class _TimeZoomState extends State<TimeZoom> with SingleTickerProviderStateMixin
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final newController = DefaultTimeController.of(context)!;
+    final newController = TimeControllerScope.of(context)!;
     if (_controller == null) {
       assert(_registration == null);
     } else if (newController != _controller) {

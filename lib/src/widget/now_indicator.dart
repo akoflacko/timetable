@@ -11,7 +11,7 @@ import '../extension/extension.dart';
 import '../resources/theme.dart';
 import '../utils.dart';
 
-import 'scope.dart';
+import 'scope/scope.dart';
 
 /// A widget that displays an indicator at the current date and time.
 ///
@@ -23,7 +23,7 @@ import 'scope.dart';
 /// See also:
 ///
 /// * [NowIndicatorStyle], which defines visual properties for this widget.
-/// * [TimetableTheme] (and [TimetableScope]), which provide styles to
+/// * [TimetableThemeScope] (and [TimetableScope]), which provide styles to
 ///   descendant Timetable widgets.
 class NowIndicator extends StatelessWidget {
   const NowIndicator({
@@ -39,8 +39,8 @@ class NowIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       foregroundPainter: _NowIndicatorPainter(
-        controller: DefaultDateController.of(context)!,
-        style: style ?? TimetableTheme.orDefaultOf(context).nowIndicatorStyle,
+        controller: DateControllerScope.of(context)!,
+        style: style ?? TimetableThemeScope.maybeOrDefaultOf(context).nowIndicatorStyle,
         devicePixelRatio: context.mediaQuery.devicePixelRatio,
       ),
       child: child,

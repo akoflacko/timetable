@@ -5,38 +5,33 @@ import 'package:flutter/rendering.dart';
 
 import 'package:black_hole_flutter/black_hole_flutter.dart';
 
-import '../controller/date_controller.dart';
 import '../event/all_day.dart';
-import '../event/builder.dart';
 import '../event/event.dart';
-import '../event/provider.dart';
 import '../extension/extension.dart';
-import '../model/callbacks.dart';
 import '../model/model.dart';
-import '../resources/theme.dart';
 import '../typedef/typedef.dart';
 import '../utils.dart';
 
-import 'layouts/multi_date.dart';
+import 'scope/scope.dart';
 import 'widget.dart';
 
 /// A widget that displays all-day [Event]s.
 ///
-/// A [DefaultDateController] and a [DefaultEventBuilder] must be above in the
+/// A [DateControllerScope] and a [EventBuilderScope] must be above in the
 /// widget tree.
 ///
-/// If [onBackgroundTap] is not supplied, [DefaultTimetableCallbacks]'s
+/// If [onBackgroundTap] is not supplied, [TimetableCallbacksScope]'s
 /// `onDateBackgroundTap` is used if it's provided above in the widget tree.
 ///
 /// See also:
 ///
-/// * [DefaultEventProvider] (and [TimetableScope]), which provide the [Event]s
+/// * [EventProviderScope] (and [TimetableScope]), which provide the [Event]s
 ///   to be displayed.
 /// * [MultiDateEventHeaderStyle], which defines visual properties for this
 ///   widget.
-/// * [TimetableTheme] (and [TimetableScope]), which provide styles to
+/// * [TimetableThemeScope] (and [TimetableScope]), which provide styles to
 ///   descendant Timetable widgets.
-/// * [DefaultTimetableCallbacks], which provides callbacks to descendant
+/// * [TimetableCallbacksScope], which provides callbacks to descendant
 ///   Timetable widgets.
 class MultiDateEventHeader<E extends Event> extends StatelessWidget {
   const MultiDateEventHeader({
@@ -50,7 +45,7 @@ class MultiDateEventHeader<E extends Event> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = this.style ?? TimetableTheme.orDefaultOf(context).multiDateEventHeaderStyle;
+    final style = this.style ?? TimetableThemeScope.maybeOrDefaultOf(context).multiDateEventHeaderStyle;
 
     final child = LayoutBuilder(builder: (context, constraints) {
       var maxEventRows = style.maxEventRows;
@@ -61,7 +56,7 @@ class MultiDateEventHeader<E extends Event> extends StatelessWidget {
       }
 
       return ValueListenableBuilder(
-        valueListenable: DefaultDateController.of(context)!,
+        valueListenable: DateControllerScope.of(context)!,
         builder: (context, pageValue, __) => _buildContent(
           context,
           pageValue,
@@ -87,7 +82,7 @@ class MultiDateEventHeader<E extends Event> extends StatelessWidget {
     required double eventHeight,
     required int maxEventRows,
   }) {
-    final onBackgroundTap = this.onBackgroundTap ?? DefaultTimetableCallbacks.of(context)?.onDateBackgroundTap;
+    final onBackgroundTap = this.onBackgroundTap ?? TimetableCallbacksScope.of(context)?.onDateBackgroundTap;
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -100,7 +95,7 @@ class MultiDateEventHeader<E extends Event> extends StatelessWidget {
           : null,
       child: _MultiDateEventHeaderEvents<E>(
         pageValue: pageValue,
-        events: DefaultEventProvider.of<E>(context)?.call(pageValue.visibleDates) ?? [],
+        events: EventProviderScope.of<E>(context)?.call(pageValue.visibleDates) ?? [],
         eventHeight: eventHeight,
         maxEventRows: maxEventRows,
       ),
@@ -137,7 +132,7 @@ class MultiDateEventHeaderStyle {
 
   /// The maximum number of rows with events to display one above the other.
   ///
-  /// If there are more events than this, [DefaultEventBuilder.allDayOverflowOf]
+  /// If there are more events than this, [EventBuilderScope.allDayOverflowOf]
   /// will be called to display information about the overflowed events. This
   /// adds one more row.
   ///
@@ -266,8 +261,8 @@ class _MultiDateEventHeaderEventsState<E extends Event> extends State<_MultiDate
 
   @override
   Widget build(BuildContext context) {
-    final allDayBuilder = DefaultEventBuilder.allDayOf<E>(context)!;
-    final allDayOverflowBuilder = DefaultEventBuilder.allDayOverflowOf<E>(context)!;
+    final allDayBuilder = EventBuilderScope.allDayOf<E>(context)!;
+    final allDayOverflowBuilder = EventBuilderScope.allDayOverflowOf<E>(context)!;
     return _EventsWidget(
       pageValue: widget.pageValue,
       eventHeight: widget.eventHeight,

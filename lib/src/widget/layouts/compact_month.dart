@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import '../../controller/controller.dart';
 import '../../extension/extension.dart';
 import '../../typedef/typedef.dart';
+import '../scope/scope.dart';
 import '../widget.dart';
 
 /// A Timetable widget that displays [MonthWidget]s in a page view.
 ///
-/// When a [DefaultDateController] is placed above in the widget tree, the
+/// When a [DateControllerScope] is placed above in the widget tree, the
 /// visible month is synced to it and swiping between months also updates that
 /// [DateController].
 class CompactMonthTimetable extends StatefulWidget {
@@ -39,7 +40,7 @@ class _CompactMonthTimetableState extends State<CompactMonthTimetable> with Tick
   void didChangeDependencies() {
     super.didChangeDependencies();
     dateController?.date.removeListener(_onDateControllerChanged);
-    dateController = DefaultDateController.of(context);
+    dateController = DateControllerScope.of(context);
     dateController?.date.addListener(_onDateControllerChanged);
   }
 

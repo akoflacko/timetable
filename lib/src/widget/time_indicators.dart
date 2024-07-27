@@ -6,10 +6,10 @@ import 'package:flutter/rendering.dart';
 import 'package:black_hole_flutter/black_hole_flutter.dart';
 
 import '../extension/extension.dart';
-import '../resources/theme.dart';
 import '../typedef/typedef.dart';
 import '../utils.dart';
 
+import 'scope/theme_scope.dart';
 import 'time_indicator.dart';
 
 /// A widget that positions [TimeIndicator] widgets.
@@ -113,7 +113,7 @@ class TimeIndicators extends StatelessWidget {
           : Builder(
               builder: (context) => TimeIndicator(
                 time: time,
-                style: TimetableTheme.orDefaultOf(context).timeIndicatorStyleProvider(time).copyWith(label: formatter(time)),
+                style: TimetableThemeScope.maybeOrDefaultOf(context).timeIndicatorStyleProvider(time).copyWith(label: formatter(time)),
               ),
             ),
     );

@@ -4,14 +4,15 @@ import 'package:black_hole_flutter/black_hole_flutter.dart';
 
 import '../event/all_day.dart';
 import '../event/basic.dart';
-import '../event/builder.dart';
 import '../extension/extension.dart';
-import 'layouts/multi_date.dart';
 import '../model/callbacks.dart';
 import '../resources/localization.dart';
 import '../utils.dart';
 
+import 'layouts/multi_date.dart';
 import 'multi_date_event_header.dart';
+import 'scope/event_builder_scope.dart';
+import 'scope/scope.dart';
 
 /// The default widget for displaying the overflow of a [MultiDateEventHeader].
 ///
@@ -26,7 +27,7 @@ import 'multi_date_event_header.dart';
 /// * [MultiDateEventHeaderStyle.maxEventRows] and
 ///   [MultiDateTimetableStyle.maxHeaderFraction], which control how many rows
 ///   are allowed before creating an overflow.
-/// * [DefaultEventBuilder.allDayOverflowBuilder], which creates this widget by
+/// * [EventBuilderScope.allDayOverflowBuilder], which creates this widget by
 ///   default.
 class MultiDateEventHeaderOverflow extends StatelessWidget {
   MultiDateEventHeaderOverflow(
@@ -41,7 +42,7 @@ class MultiDateEventHeaderOverflow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final onMultiDateHeaderOverflowTap = DefaultTimetableCallbacks.of(context)?.onMultiDateHeaderOverflowTap;
+    final onMultiDateHeaderOverflowTap = TimetableCallbacksScope.of(context)?.onMultiDateHeaderOverflowTap;
     return BasicAllDayEventWidget(
       BasicEvent(
         id: date,

@@ -40,22 +40,6 @@ TimeOverlayProvider mergeTimeOverlayProviders(
   return (context, date) => overlayProviders.expand((it) => it(context, date)).toList();
 }
 
-class DefaultTimeOverlayProvider extends InheritedWidget {
-  const DefaultTimeOverlayProvider({
-    required this.overlayProvider,
-    required super.child,
-  });
-
-  final TimeOverlayProvider overlayProvider;
-
-  @override
-  bool updateShouldNotify(DefaultTimeOverlayProvider oldWidget) => overlayProvider != oldWidget.overlayProvider;
-
-  static TimeOverlayProvider? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<DefaultTimeOverlayProvider>()?.overlayProvider;
-  }
-}
-
 extension EventToTimeOverlay on Event {
   TimeOverlay? toTimeOverlay({
     required DateTime date,

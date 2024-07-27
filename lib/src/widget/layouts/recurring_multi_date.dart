@@ -4,9 +4,9 @@ import '../../controller/controller.dart';
 import '../../event/event.dart';
 import '../../event/provider.dart';
 import '../../model/visible_date_range.dart';
-import '../../resources/theme.dart';
 import '../../typedef/typedef.dart';
-import '../scope.dart';
+import '../scope/timetable_scope.dart';
+import '../scope/theme_scope.dart';
 
 import 'multi_date.dart';
 
@@ -40,9 +40,9 @@ class RecurringMultiDateTimetable<E extends Event> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = TimetableTheme.orDefaultOf(context);
+    final theme = TimetableThemeScope.maybeOrDefaultOf(context);
 
-    return TimetableTheme(
+    return TimetableThemeScope(
       data: theme.copyWith(
         dateHeaderStyleProvider: (date) => theme.dateHeaderStyleProvider(date).copyWith(showDateIndicator: false),
       ),

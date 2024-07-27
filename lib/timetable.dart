@@ -4,7 +4,7 @@ export 'src/controller/controller.dart';
 
 export 'src/event/all_day.dart';
 export 'src/event/basic.dart';
-export 'src/event/builder.dart';
+export 'src/widget/scope/event_builder_scope.dart';
 export 'src/event/event.dart';
 export 'src/event/provider.dart';
 

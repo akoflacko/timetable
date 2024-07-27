@@ -9,7 +9,7 @@ import '../resources/localization.dart';
 import '../resources/theme.dart';
 import '../utils.dart';
 
-import 'scope.dart';
+import 'scope/scope.dart';
 
 /// A widget that displays the week number and possibly year for the given week.
 ///
@@ -17,15 +17,15 @@ import 'scope.dart';
 /// fits the available width is chosen. This behavior can be changed via
 /// [alwaysUseNarrowestVariant].
 ///
-/// If [onTap] is not supplied, [DefaultTimetableCallbacks]'s `onWeekTap` is
+/// If [onTap] is not supplied, [TimetableCallbacksScope]'s `onWeekTap` is
 /// used if it's provided above in the widget tree.
 ///
 /// See also:
 ///
 /// * [WeekIndicatorStyle], which defines visual properties for this widget.
-/// * [TimetableTheme] (and [TimetableScope]), which provide styles to
+/// * [TimetableThemeScope] (and [TimetableScope]), which provide styles to
 ///   descendant Timetable widgets.
-/// * [DefaultTimetableCallbacks], which provides callbacks to descendant
+/// * [TimetableCallbacksScope], which provides callbacks to descendant
 ///   Timetable widgets.
 class WeekIndicator extends StatelessWidget {
   const WeekIndicator(
@@ -65,8 +65,8 @@ class WeekIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = this.style ?? TimetableTheme.orDefaultOf(context).weekIndicatorStyleProvider(week);
-    final defaultOnTap = DefaultTimetableCallbacks.of(context)?.onWeekTap;
+    final style = this.style ?? TimetableThemeScope.maybeOrDefaultOf(context).weekIndicatorStyleProvider(week);
+    final defaultOnTap = TimetableCallbacksScope.of(context)?.onWeekTap;
 
     return InkResponse(
       onTap: onTap ?? (defaultOnTap != null ? () => defaultOnTap(week) : null),
@@ -339,7 +339,7 @@ class _WeekIndicatorForController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: (controller ?? DefaultDateController.of(context)!).date.map((it) => it.week),
+      valueListenable: (controller ?? DateControllerScope.of(context)!).date.map((it) => it.week),
       builder: (context, week, _) => WeekIndicator(
         week,
         alwaysUseNarrowestVariant: alwaysUseNarrowestVariant,

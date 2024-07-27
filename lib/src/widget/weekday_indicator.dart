@@ -8,14 +8,15 @@ import '../resources/localization.dart';
 import '../resources/theme.dart';
 import '../utils.dart';
 
-import 'scope.dart';
+import 'scope/timetable_scope.dart';
+import 'scope/theme_scope.dart';
 
 /// A widget that displays the weekday for the given date.
 ///
 /// See also:
 ///
 /// * [WeekdayIndicatorStyle], which defines visual properties for this widget.
-/// * [TimetableTheme] (and [TimetableScope]), which provide styles to
+/// * [TimetableThemeScope] (and [TimetableScope]), which provide styles to
 ///   descendant Timetable widgets.
 class WeekdayIndicator extends StatelessWidget {
   WeekdayIndicator(
@@ -29,7 +30,7 @@ class WeekdayIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = this.style ?? TimetableTheme.orDefaultOf(context).weekdayIndicatorStyleProvider(date);
+    final style = this.style ?? TimetableThemeScope.maybeOrDefaultOf(context).weekdayIndicatorStyleProvider(date);
 
     return DecoratedBox(
       decoration: style.decoration,

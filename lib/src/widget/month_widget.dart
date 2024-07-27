@@ -8,8 +8,9 @@ import '../resources/theme.dart';
 import '../typedef/typedef.dart';
 import '../utils.dart';
 
-import 'scope.dart';
+import 'scope/timetable_scope.dart';
 import 'date_indicator.dart';
+import 'scope/theme_scope.dart';
 import 'week_indicator.dart';
 import 'weekday_indicator.dart';
 
@@ -19,7 +20,7 @@ import 'weekday_indicator.dart';
 /// See also:
 ///
 /// * [MonthWidgetStyle], which defines visual properties for this widget.
-/// * [TimetableTheme] (and [TimetableScope]), which provide styles to
+/// * [TimetableThemeScope] (and [TimetableScope]), which provide styles to
 ///   descendant Timetable widgets.
 class MonthWidget extends StatelessWidget {
   MonthWidget(
@@ -32,7 +33,7 @@ class MonthWidget extends StatelessWidget {
         weekDayBuilder = weekDayBuilder ?? ((context, date) => WeekdayIndicator(date)),
         weekBuilder = weekBuilder ??
             ((context, week) {
-              final timetableTheme = TimetableTheme.orDefaultOf(context);
+              final timetableTheme = TimetableThemeScope.maybeOrDefaultOf(context);
               return WeekIndicator(
                 week,
                 style: (style ?? timetableTheme.monthWidgetStyleProvider(month)).removeIndividualWeekDecorations
@@ -45,7 +46,7 @@ class MonthWidget extends StatelessWidget {
             ((context, date) {
               assert(date.debugCheckIsValidTimetableDate());
 
-              final timetableTheme = TimetableTheme.orDefaultOf(context);
+              final timetableTheme = TimetableThemeScope.maybeOrDefaultOf(context);
               DateIndicatorStyle? dateStyle;
               if (date.firstDayOfMonth != month && (style ?? timetableTheme.monthWidgetStyleProvider(month)).showDatesFromOtherMonthsAsDisabled) {
                 final original = timetableTheme.dateIndicatorStyleProvider(date);
@@ -68,7 +69,7 @@ class MonthWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = this.style ?? TimetableTheme.orDefaultOf(context).monthWidgetStyleProvider(month);
+    final style = this.style ?? TimetableThemeScope.maybeOrDefaultOf(context).monthWidgetStyleProvider(month);
 
     final firstDay = month.previousOrSame(style.startOfWeek);
     final minDayCount = month.lastDayOfMonth.difference(firstDay).inDays + 1;

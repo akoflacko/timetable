@@ -1,25 +1,26 @@
-import 'package:black_hole_flutter/black_hole_flutter.dart';
 import 'package:flutter/material.dart';
+
+import 'package:black_hole_flutter/black_hole_flutter.dart';
 import 'package:intl/intl.dart';
 
-import '../model/callbacks.dart';
-import 'scope.dart';
+import '../extension/extension.dart';
 import '../resources/localization.dart';
 import '../resources/theme.dart';
 import '../utils.dart';
-import '../extension/extension.dart';
+
+import 'scope/scope.dart';
 
 /// A widget that displays the date of month for the given date.
 ///
-/// If [onTap] is not supplied, [DefaultTimetableCallbacks]'s `onDateTap` is
+/// If [onTap] is not supplied, [TimetableCallbacksScope]'s `onDateTap` is
 /// used if it's provided above in the widget tree.
 ///
 /// See also:
 ///
 /// * [DateIndicatorStyle], which defines visual properties for this widget.
-/// * [TimetableTheme] (and [TimetableScope]), which provide styles to
+/// * [TimetableThemeScope] (and [TimetableScope]), which provide styles to
 ///   descendant Timetable widgets.
-/// * [DefaultTimetableCallbacks], which provides callbacks to descendant
+/// * [TimetableCallbacksScope], which provides callbacks to descendant
 ///   Timetable widgets.
 class DateIndicator extends StatelessWidget {
   DateIndicator(
@@ -35,8 +36,8 @@ class DateIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = this.style ?? TimetableTheme.orDefaultOf(context).dateIndicatorStyleProvider(date);
-    final defaultOnTap = DefaultTimetableCallbacks.of(context)?.onDateTap;
+    final style = this.style ?? TimetableThemeScope.maybeOrDefaultOf(context).dateIndicatorStyleProvider(date);
+    final defaultOnTap = TimetableCallbacksScope.of(context)?.onDateTap;
 
     return InkResponse(
       onTap: onTap ?? (defaultOnTap != null ? () => defaultOnTap(date) : null),
