@@ -11,7 +11,6 @@ import '../utils.dart';
 
 import 'layouts/multi_date.dart';
 import 'multi_date_event_header.dart';
-import 'scope/event_builder_scope.dart';
 import 'scope/scope.dart';
 
 /// The default widget for displaying the overflow of a [MultiDateEventHeader].

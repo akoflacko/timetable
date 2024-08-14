@@ -5,8 +5,7 @@ import '../../event/event.dart';
 import '../../event/provider.dart';
 import '../../model/visible_date_range.dart';
 import '../../typedef/typedef.dart';
-import '../scope/timetable_scope.dart';
-import '../scope/theme_scope.dart';
+import '../scope/scope.dart';
 
 import 'multi_date.dart';
 
@@ -17,7 +16,7 @@ import 'multi_date.dart';
 /// [VisibleDateRange.fixed]), [TimeController], [EventProvider], and
 /// [EventBuilder] via a [TimetableScope] widget above in the widget tree. (You
 /// can also provide these via `DefaultFoo` widgets directly, like
-/// [DefaultDateController].)
+/// [DateControllerScope].)
 ///
 /// See also:
 ///

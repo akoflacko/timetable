@@ -8,7 +8,6 @@ import '../model/overlay.dart';
 import '../typedef/typedef.dart';
 import '../utils.dart';
 
-import 'scope/scope.dart';
 import 'widget.dart';
 
 /// A widget that displays the content of multiple consecutive dates, zoomable

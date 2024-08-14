@@ -24,8 +24,4 @@ export 'layouts/compact_month.dart';
 export 'layouts/multi_date.dart';
 export 'layouts/recurring_multi_date.dart';
 
-export 'scope/date_controller_scope.dart';
-export 'scope/event_provider_scope.dart';
-export 'scope/theme_scope.dart';
-export 'scope/time_controller_scope.dart';
-export 'scope/timetable_scope.dart';
+export 'scope/scope.dart';

@@ -12,7 +12,6 @@ import '../model/model.dart';
 import '../typedef/typedef.dart';
 import '../utils.dart';
 
-import 'scope/scope.dart';
 import 'widget.dart';
 
 /// A widget that displays all-day [Event]s.

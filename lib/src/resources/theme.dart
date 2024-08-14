@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../widget/layouts/multi_date.dart';
 import '../typedef/typedef.dart';
 import '../utils.dart';
 import '../widget/date_dividers.dart';
@@ -8,10 +7,12 @@ import '../widget/date_events.dart';
 import '../widget/date_header.dart';
 import '../widget/date_indicator.dart';
 import '../widget/hour_dividers.dart';
+import '../widget/layouts/multi_date.dart';
 import '../widget/month_indicator.dart';
 import '../widget/month_widget.dart';
 import '../widget/multi_date_event_header.dart';
 import '../widget/now_indicator.dart';
+import '../widget/scope/scope.dart';
 import '../widget/time_indicator.dart';
 import '../widget/week_indicator.dart';
 import '../widget/weekday_indicator.dart';
@@ -20,7 +21,7 @@ import '../widget/weekday_indicator.dart';
 ///
 /// See also:
 ///
-/// * [TimetableTheme], which makes the theme data available to nested widgets.
+/// * [TimetableThemeScope], which makes the theme data available to nested widgets.
 @immutable
 class TimetableThemeData {
   factory TimetableThemeData(

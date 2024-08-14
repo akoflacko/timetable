@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../controller/controller.dart';
 import '../../extension/extension.dart';
 import '../../typedef/typedef.dart';
-import '../scope/scope.dart';
 import '../widget.dart';
 
 /// A Timetable widget that displays [MonthWidget]s in a page view.

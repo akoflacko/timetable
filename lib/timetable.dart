@@ -10,5 +10,4 @@ export 'src/event/provider.dart';
 
 export 'src/resources/resources.dart';
 export 'src/model/model.dart';
-export 'src/model/visible_date_range.dart';
 export 'src/extension/extension.dart';

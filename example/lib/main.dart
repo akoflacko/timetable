@@ -190,9 +190,9 @@ class _TimetableExampleState extends State<TimetableExample> with TickerProvider
         child,
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Builder(builder: (context) {
-            return DefaultTimetableCallbacks(
-              callbacks: DefaultTimetableCallbacks.of(context)!.copyWith(
+          child: Builder(
+            builder: (context) => TimetableCallbacksScope(
+              callbacks: TimetableCallbacksScope.of(context)!.copyWith(
                 onDateTap: (date) {
                   _showSnackBar('Tapped on date $date.');
                   _updateVisibleDateRange(PredefinedVisibleDateRange.day);
@@ -200,8 +200,8 @@ class _TimetableExampleState extends State<TimetableExample> with TickerProvider
                 },
               ),
               child: CompactMonthTimetable(),
-            );
-          }),
+            ),
+          ),
         ),
       ]);
     }

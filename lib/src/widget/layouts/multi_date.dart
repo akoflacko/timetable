@@ -6,7 +6,6 @@ import '../../event/provider.dart';
 import '../../typedef/typedef.dart';
 import '../../utils.dart';
 import '../../utils/constraints_passing_column.dart';
-import '../scope/scope.dart';
 import '../widget.dart';
 
 /// A Timetable widget that displays multiple consecutive days.
