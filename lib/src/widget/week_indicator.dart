@@ -261,7 +261,9 @@ class WeekIndicatorStyle {
       tooltip: tooltip ?? localizations.weekOfYear(week),
       decoration: decoration ??
           BoxDecoration(
-            color: colorScheme.brightness.contrastColor.withOpacity(0.05),
+            color: colorScheme.brightness.contrastColor.withValues(
+              alpha: 0.05,
+            ),
             borderRadius: const BorderRadius.all(Radius.circular(4)),
           ),
       padding: padding ?? const EdgeInsets.symmetric(horizontal: 8, vertical: 2),

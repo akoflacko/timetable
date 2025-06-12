@@ -69,7 +69,9 @@ class ExampleApp extends StatelessWidget {
       snackBarTheme: const SnackBarThemeData(behavior: SnackBarBehavior.floating),
     );
     theme = theme.copyWith(
-      colorScheme: theme.colorScheme.copyWith(onBackground: theme.colorScheme.background.contrastColor),
+      colorScheme: theme.colorScheme.copyWith(
+        onSurface: theme.colorScheme.onSurface.contrastColor,
+      ),
       textTheme: theme.textTheme.copyWith(
         titleLarge: theme.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.normal),
       ),

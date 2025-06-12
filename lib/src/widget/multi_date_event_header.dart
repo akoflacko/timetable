@@ -33,11 +33,7 @@ import 'widget.dart';
 /// * [TimetableCallbacksScope], which provides callbacks to descendant
 ///   Timetable widgets.
 class MultiDateEventHeader<E extends Event> extends StatelessWidget {
-  const MultiDateEventHeader({
-    super.key,
-    this.onBackgroundTap,
-    this.style,
-  });
+  const MultiDateEventHeader({super.key, this.onBackgroundTap, this.style});
 
   final DateTapCallback? onBackgroundTap;
   final MultiDateEventHeaderStyle? style;
@@ -46,32 +42,30 @@ class MultiDateEventHeader<E extends Event> extends StatelessWidget {
   Widget build(BuildContext context) {
     final style = this.style ?? TimetableThemeScope.maybeOrDefaultOf(context).multiDateEventHeaderStyle;
 
-    final child = LayoutBuilder(builder: (context, constraints) {
-      var maxEventRows = style.maxEventRows;
-      if (constraints.maxHeight.isFinite) {
-        final maxRowsFromHeight = (constraints.maxHeight / style.eventHeight).floor();
-        final maxEventRowsFromHeight = (maxRowsFromHeight - 1).coerceAtLeast(0);
-        maxEventRows = maxEventRowsFromHeight.coerceAtMost(maxEventRows);
-      }
+    final child = LayoutBuilder(
+      builder: (context, constraints) {
+        var maxEventRows = style.maxEventRows;
+        if (constraints.maxHeight.isFinite) {
+          final maxRowsFromHeight = (constraints.maxHeight / style.eventHeight).floor();
+          final maxEventRowsFromHeight = (maxRowsFromHeight - 1).coerceAtLeast(0);
+          maxEventRows = maxEventRowsFromHeight.coerceAtMost(maxEventRows);
+        }
 
-      return ValueListenableBuilder(
-        valueListenable: DateControllerScope.of(context)!,
-        builder: (context, pageValue, __) => _buildContent(
-          context,
-          pageValue,
-          width: constraints.maxWidth,
-          eventHeight: style.eventHeight,
-          maxEventRows: maxEventRows,
-        ),
-      );
-    });
+        return ValueListenableBuilder(
+          valueListenable: DateControllerScope.of(context)!,
+          builder:
+              (context, pageValue, _) =>
+                  _buildContent(context, pageValue, width: constraints.maxWidth, eventHeight: style.eventHeight, maxEventRows: maxEventRows),
+        );
+      },
+    );
 
-    return Stack(children: [
-      Positioned.fill(
-        child: DatePageView(builder: (context, date) => const SizedBox()),
-      ),
-      ClipRect(child: Padding(padding: style.padding, child: child)),
-    ]);
+    return Stack(
+      children: [
+        Positioned.fill(child: DatePageView(builder: (context, date) => const SizedBox())),
+        ClipRect(child: Padding(padding: style.padding, child: child)),
+      ],
+    );
   }
 
   Widget _buildContent(
@@ -85,13 +79,14 @@ class MultiDateEventHeader<E extends Event> extends StatelessWidget {
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTapUp: onBackgroundTap != null
-          ? (details) {
-              final tappedCell = details.localPosition.dx / width * pageValue.visibleDayCount;
-              final page = (pageValue.page + tappedCell).floor();
-              onBackgroundTap(DateTimeTimetable.dateFromPage(page));
-            }
-          : null,
+      onTapUp:
+          onBackgroundTap != null
+              ? (details) {
+                final tappedCell = details.localPosition.dx / width * pageValue.visibleDayCount;
+                final page = (pageValue.page + tappedCell).floor();
+                onBackgroundTap(DateTimeTimetable.dateFromPage(page));
+              }
+              : null,
       child: _MultiDateEventHeaderEvents<E>(
         pageValue: pageValue,
         events: EventProviderScope.of<E>(context)?.call(pageValue.visibleDates) ?? [],
@@ -113,18 +108,10 @@ class MultiDateEventHeaderStyle {
     int? maxEventRows,
     EdgeInsetsGeometry? padding,
   }) {
-    return MultiDateEventHeaderStyle.raw(
-      eventHeight: eventHeight ?? 24,
-      maxEventRows: maxEventRows ?? 3,
-      padding: padding ?? EdgeInsets.zero,
-    );
+    return MultiDateEventHeaderStyle.raw(eventHeight: eventHeight ?? 24, maxEventRows: maxEventRows ?? 3, padding: padding ?? EdgeInsets.zero);
   }
 
-  const MultiDateEventHeaderStyle.raw({
-    this.eventHeight = 24,
-    this.maxEventRows = 3,
-    this.padding = EdgeInsets.zero,
-  });
+  const MultiDateEventHeaderStyle.raw({this.eventHeight = 24, this.maxEventRows = 3, this.padding = EdgeInsets.zero});
 
   /// Height of a single all-day event.
   final double eventHeight;
@@ -149,11 +136,7 @@ class MultiDateEventHeaderStyle {
 
   final EdgeInsetsGeometry padding;
 
-  MultiDateEventHeaderStyle copyWith({
-    double? eventHeight,
-    int? maxEventRows,
-    EdgeInsetsGeometry? padding,
-  }) {
+  MultiDateEventHeaderStyle copyWith({double? eventHeight, int? maxEventRows, EdgeInsetsGeometry? padding}) {
     return MultiDateEventHeaderStyle.raw(
       eventHeight: eventHeight ?? this.eventHeight,
       maxEventRows: maxEventRows ?? this.maxEventRows,
@@ -170,12 +153,7 @@ class MultiDateEventHeaderStyle {
 }
 
 class _MultiDateEventHeaderEvents<E extends Event> extends StatefulWidget {
-  const _MultiDateEventHeaderEvents({
-    required this.pageValue,
-    required this.events,
-    required this.eventHeight,
-    required this.maxEventRows,
-  });
+  const _MultiDateEventHeaderEvents({required this.pageValue, required this.events, required this.eventHeight, required this.maxEventRows});
 
   final DatePageValue pageValue;
   final List<E> events;
@@ -280,9 +258,10 @@ class _MultiDateEventHeaderEventsState<E extends Event> extends State<_MultiDate
           if (maxPosition <= widget.maxEventRows) return null;
 
           final dateInterval = date.fullDayInterval;
-          final overflowedEvents = widget.events.where((it) {
-            return it.interval.dateInterval.intersects(dateInterval) && _yPositions[it] == null;
-          }).toList();
+          final overflowedEvents =
+              widget.events.where((it) {
+                return it.interval.dateInterval.intersects(dateInterval) && _yPositions[it] == null;
+              }).toList();
           return _EventParentDataWidget(
             key: ValueKey(date),
             dateInterval: dateInterval,
@@ -307,12 +286,8 @@ class _MultiDateEventHeaderEventsState<E extends Event> extends State<_MultiDate
 }
 
 class _EventParentDataWidget extends ParentDataWidget<_EventParentData> {
-  _EventParentDataWidget({
-    super.key,
-    required this.dateInterval,
-    required this.yPosition,
-    required super.child,
-  }) : assert(dateInterval.debugCheckIsValidTimetableDateInterval());
+  _EventParentDataWidget({super.key, required this.dateInterval, required this.yPosition, required super.child})
+    : assert(dateInterval.debugCheckIsValidTimetableDateInterval());
 
   final Interval dateInterval;
   final int yPosition;
@@ -337,12 +312,7 @@ class _EventParentDataWidget extends ParentDataWidget<_EventParentData> {
 }
 
 class _EventsWidget extends MultiChildRenderObjectWidget {
-  const _EventsWidget({
-    required this.pageValue,
-    required this.eventHeight,
-    required this.maxEventRows,
-    required super.children,
-  });
+  const _EventsWidget({required this.pageValue, required this.eventHeight, required this.maxEventRows, required super.children});
 
   final DatePageValue pageValue;
   final double eventHeight;
@@ -350,11 +320,7 @@ class _EventsWidget extends MultiChildRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    return _EventsLayout(
-      pageValue: pageValue,
-      eventHeight: eventHeight,
-      maxEventRows: maxEventRows,
-    );
+    return _EventsLayout(pageValue: pageValue, eventHeight: eventHeight, maxEventRows: maxEventRows);
   }
 
   @override
@@ -373,13 +339,10 @@ class _EventParentData extends ContainerBoxParentData<RenderBox> {
 
 class _EventsLayout extends RenderBox
     with ContainerRenderObjectMixin<RenderBox, _EventParentData>, RenderBoxContainerDefaultsMixin<RenderBox, _EventParentData> {
-  _EventsLayout({
-    required DatePageValue pageValue,
-    required double eventHeight,
-    required Map<int, int> maxEventRows,
-  })  : _pageValue = pageValue,
-        _eventHeight = eventHeight,
-        _maxEventPositions = maxEventRows;
+  _EventsLayout({required DatePageValue pageValue, required double eventHeight, required Map<int, int> maxEventRows})
+    : _pageValue = pageValue,
+      _eventHeight = eventHeight,
+      _maxEventPositions = maxEventRows;
 
   DatePageValue _pageValue;
   DatePageValue get pageValue => _pageValue;
@@ -466,12 +429,7 @@ class _EventsLayout extends RenderBox
       final right = ((endPage - pageValue.page) * dateWidth).coerceAtMost(size.width);
 
       child.layout(
-        BoxConstraints(
-          minWidth: right - left,
-          maxWidth: (right - left).coerceAtLeast(dateWidth),
-          minHeight: eventHeight,
-          maxHeight: eventHeight,
-        ),
+        BoxConstraints(minWidth: right - left, maxWidth: (right - left).coerceAtLeast(dateWidth), minHeight: eventHeight, maxHeight: eventHeight),
         parentUsesSize: true,
       );
       final actualLeft = startPage >= pageValue.page ? left : left.coerceAtMost(right - child.size.width);

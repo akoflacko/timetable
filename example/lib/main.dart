@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:black_hole_flutter/black_hole_flutter.dart';
-import 'package:collection/collection.dart';
 import 'package:time/time.dart' hide DateTimeTimeExtension;
 
 import 'package:timetable/timetable.dart';
@@ -82,7 +81,7 @@ class _TimetableExampleState extends State<TimetableExample> with TickerProvider
             .map(
               (it) => it.toTimeOverlay(date: date, widget: BasicEventWidget(it)),
             )
-            .whereNotNull()
+            .nonNulls
             .toList(),
       ]),
       callbacks: TimetableCallbacks(

@@ -238,9 +238,7 @@ class _DemoEvent extends BasicEvent {
         );
 
   static Color _getColor(String id) {
-    return Random(id.hashCode)
-        .nextColorHsv(saturation: 0.6, value: 0.8, alpha: 1)
-        .toColor();
+    return Random(id.hashCode).nextColorHsv(saturation: 0.6, value: 0.8, alpha: 1).toColor();
   }
 }
 
@@ -250,8 +248,11 @@ List<TimeOverlay> positioningDemoOverlayProvider(
 ) {
   assert(date.debugCheckIsValidTimetableDate());
 
-  final widget =
-      ColoredBox(color: context.theme.brightness.contrastColor.withOpacity(.1));
+  final widget = ColoredBox(
+    color: context.theme.brightness.contrastColor.withValues(
+      alpha: .1,
+    ),
+  );
 
   if (DateTime.monday <= date.weekday && date.weekday <= DateTime.friday) {
     return [

@@ -5,8 +5,6 @@ analyzer:
     strict-casts: true
     strict-inference: true
     strict-raw-types: true
-  plugins:
-    - dart_code_metrics
 
 linter:
   rules:
@@ -68,7 +66,6 @@ linter:
     unnecessary_statements: true
     unnecessary_to_list_in_spreads: true
     unreachable_from_main: true
-    unsafe_html: true
     use_colored_box: true
     use_decorated_box: true
     use_enums: true
