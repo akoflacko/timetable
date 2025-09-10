@@ -1,6 +1,6 @@
 name: timetable
 description: Customizable, animated calendar widget including day, week, and month views
-version: 1.0.0-alpha.18
+version: 1.0.0-alpha.19
 repository: https://github.com/JonasWanke/timetable
 screenshots:
   - description: Navigation with synchronized month and week views
@@ -18,11 +18,11 @@ screenshots:
 
 environment:
   sdk: ">=3.7.0 <4.0.0"
-  flutter: ">=3.32.0 <4.0.0"
+  flutter: ">=3.29.3 <4.0.0"
 
 dependencies:
   intl: any
-  async: ^2.13.0
+  async: ^2.12.0
   black_hole_flutter: ^1.1.0
   collection: ^1.15.0
   dart_date: ^1.1.0
@@ -33,7 +33,7 @@ dependencies:
   meta: any
 
 dev_dependencies:
-  flutter_lints: ^6.0.0
+  flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
   test: any
